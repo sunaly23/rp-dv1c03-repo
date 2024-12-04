@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+    stages {
+        stage('Setup Release Environment') {
+            steps {
+                echo 'ST1-8624687B: Setup Release Environment Completed.'
+            }
+        }
+        stage('Create and Configure Docker Container') {
+            steps {
+                echo 'ST2-8624687B: Server Setup Completed.'
+            }
+        }
+        stage('Security Testing') {
+            parallel {
+                stage('XSS Testing') {
+                    steps {
+                        echo 'ST3A-8624687B: XSS Test Completed and Report Generated.'
+                    }
+                }
+                stage('SQLi Testing') {
+                    steps {
+                        echo 'ST3B-8624687B: SQLi Test Completed and Report Generated.'
+                    }
+                }
+            }
+        }
+        stage('Review Security Reports') {
+            steps {
+                echo 'ST4-8624687B: Security reports are checked.'
+            }
+        }
+        stage('Approval for Next Phase') {
+            steps {
+                script {
+                    def userInput = input(id: 'Proceed1', message: 'Hello 8624687B, permission to proceed to next phase?', ok: 'Proceed', parameters: [choice(name: 'Confirm', choices: 'Proceed\nAbort', description: 'Select Proceed or Abort')])
+                    if (userInput == 'Proceed') {
+                        echo 'ST5-8624687B: Approved to proceed to next phase.'
+                    } else {
+                        error('Pipeline aborted by user.')
+                    }
+                }
+            }
+        }
+        stage('Deployment Readiness') {
+            steps {
+                echo 'ST6-8624687B: Ready for next phase.'
+            }
+        }
+    }
+}
+
